@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import com.prs.business.Request;
+import com.prs.business.User;
 import com.prs.db.RequestRepository;
 import com.prs.db.UserRepository;
 
@@ -157,6 +158,24 @@ public class RequestController {
 		return jr;
 	}
 	
+	@GetMapping("/check-on/{id}")
+	public JsonResponse checkOn(@PathVariable int id) {
+		JsonResponse jr = null;
+		
+		try {
+			List<Request> reqs = new ArrayList<>();
+			reqs = requestRepo.findAllByUser(userRepo.findById(id).get());
+						
+			jr = JsonResponse.getInstance(reqs);
+		}
+		catch (Exception e) {
+			jr = JsonResponse.getInstance(e);
+			e.printStackTrace();
+		}
+		
+		return jr;
+	}
+	
 	@PutMapping("/approve")
 	public JsonResponse approve(@RequestBody Request r) {
 		JsonResponse jr = null;
@@ -178,7 +197,7 @@ public class RequestController {
 		JsonResponse jr = null;
 		
 		try {
-			r.setStatus("REJECTED");
+			r.setStatus("Rejected");
 			jr = JsonResponse.getInstance(requestRepo.save(r));
 		}
 		catch (Exception e) {

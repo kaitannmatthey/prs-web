@@ -9,4 +9,5 @@ import com.prs.business.User;
 
 public interface RequestRepository extends CrudRepository<Request, Integer> {
 	List<Request> findAllByStatusAndUserNot(String status, User user);
+	List<Request> findAllByUser(User user);
 }
